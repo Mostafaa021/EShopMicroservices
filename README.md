@@ -1,2 +1,2 @@
 # EShopMicroservices
-Microservices Project for Training on practicing on Microservices architcture &amp; Docker
+Microservices Project for Training and practicing on Microservices architcture &amp; Docker
