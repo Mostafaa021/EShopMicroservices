@@ -3,7 +3,7 @@
 namespace Catalog.API.Products.CreateProduct
 {
 
-    public record CreateProductRequest(string ProductName, List<string> Categories, string Descroption, string ImageFile, decimal Price);
+    public record CreateProductRequest(string ProductName, List<string> Category, string Descreption, string ImageFile, decimal Price);
     public record CreateProductResponce(Guid Id);
 
     public class CreatePRoductEndPoint : ICarterModule

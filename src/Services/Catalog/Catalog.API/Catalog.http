@@ -1,0 +1,4 @@
+
+@Catalog_Url = https://localhost:5050
+@ProductId = 0190f4dd-25fa-402e-b97f-bff02e8915f1
+GET {{Catalog_Url}}/products/{{ProductId}}
