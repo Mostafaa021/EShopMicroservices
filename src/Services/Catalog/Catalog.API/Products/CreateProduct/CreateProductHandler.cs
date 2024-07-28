@@ -1,16 +1,13 @@
 ﻿
 
-using Microsoft.AspNetCore.Http.HttpResults;
-using Catalog.API.Models;
-using System.Windows.Input;
-using BuildingBlocks.Abstractions.CQRS;
 
 namespace Catalog.API.Products.CreateProduct
 {
-    public record CreateProductCommand(string ProductName ,List<string> Categories , string Descroption , string ImageFile , decimal Price )
+    public record CreateProductCommand(string ProductName ,List<string> Category, string Descreption, string ImageFile , decimal Price )
         :ICommand<CreateProductResult>;
     public record CreateProductResult(Guid Id);
-    internal class CreateProducCommandtHandler : ICommandHandler<CreateProductCommand, CreateProductResult>
+    internal class CreateProducCommandtHandler(IDocumentSession session)
+        : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand CommandRequest, CancellationToken cancellationToken)
         {
@@ -18,17 +15,21 @@ namespace Catalog.API.Products.CreateProduct
             var Product = new Product()
             {
                 ProductName = CommandRequest.ProductName,
-                Descroption = CommandRequest.Descroption,
+                Descreption = CommandRequest.Descreption,
                 ImageFile = CommandRequest.ImageFile,
-                Price = CommandRequest.Price
+                Price = CommandRequest.Price ,
+                Category = CommandRequest.Category
             };
 
             // Save to Database 
-            // TODO
+            // When Using with Marten Library for Postgres Document DB => We Deal with (DocumentSession) as Unit of Work for Querying and Command => Base Class (IDocumentStore)
+            // IQuerySession Only for Querying Data with Notracking =>  Base Class (IDocumentStore)
+            //DocumentSession=> 1)IdentityMapDocumentSession, 2)LightWeightDocumentSession , 3)DirtyCheckDocumentSession
+            session.Store(Product);
+            await session.SaveChangesAsync(cancellationToken);
 
             // Return CreateProductResult from Handle 
-
-                return new CreateProductResult(Guid.NewGuid());
+              return new CreateProductResult(Product.Id);
 
         }
     }
