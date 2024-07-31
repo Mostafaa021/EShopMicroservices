@@ -5,7 +5,7 @@ using Catalog.API.Products.GetAllProducts;
 namespace Catalog.API.Products.CreateProduct
 {
 
-    public record GetAllProductsRequest();
+    public record GetAllProductsRequest(int ? PageNumber =1, int? PageSize = 10);
     public record GetAllProductsResponce(IEnumerable<Product> Products);
 
     public class GetAllProductsEndPoint : ICarterModule
@@ -13,11 +13,12 @@ namespace Catalog.API.Products.CreateProduct
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             app.MapGet("/Products",
-                async (ISender sender) =>
+                async ([AsParameters] GetAllProductsRequest request, ISender sender) =>
             {
 
+                var query = request.Adapt<GetAllProductsQuery>();
                 // MediatR (ISender) Need Query Object and get this result to be ready for RequestHandler 
-                var result = await sender.Send(new GetAllProductsQuery());
+                var result = await sender.Send(query);
 
                 // Map Result to Responce of Type <T> ==> GetAllProductsResponce
                 var Responce = result.Adapt<GetAllProductsResponce>();
