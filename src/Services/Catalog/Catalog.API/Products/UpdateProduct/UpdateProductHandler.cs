@@ -7,13 +7,11 @@ namespace Catalog.API.Products.UpdateProduct
        : ICommand<UpdateProductResult>;
     public record UpdateProductResult(bool IsSucess);
     internal class UpdateProductCommandHandler
-        (IDocumentSession session, ILogger<UpdateProductCommandHandler> logger)
+        (IDocumentSession session)
         : ICommandHandler<UpdateProductCommand, UpdateProductResult>
     {
         public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
         {
-            logger.LogInformation("UpdateProductCommandHandler.Hanlde Called by {@Query}", command);
-
             // Get Product from Database
             var product = await session.LoadAsync<Product>(command.Id,cancellationToken);
             if (product is not null)
@@ -31,13 +29,9 @@ namespace Catalog.API.Products.UpdateProduct
             }
             else
             {
-                return new UpdateProductResult(false);
-                //throw new ProductNotFoundException();
+                //return new UpdateProductResult(false);
+                throw new ProductNotFoundException(command.Id);
             }
-            
-
-            
-             // Return product as Product Result 
             
         }
     }
