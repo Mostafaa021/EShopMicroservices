@@ -28,7 +28,7 @@ namespace BuildingBlocks.Behaviours
 
             timer.Stop();
             var timeTaken = timer.Elapsed;
-            if (timeTaken.Seconds > 3) // if the request is greater than 3 seconds, then log the warnings
+            if (timeTaken.Seconds > 30) // if the request is greater than 3 seconds, then log the warnings
                 logger.LogWarning($"[PERFORMANCE] The request {typeof(TRequest).Name} took {timeTaken.Seconds} seconds.");
 
             logger.LogInformation($"[END] Handled {typeof(TRequest).Name} with {typeof(TResponce).Name}");
