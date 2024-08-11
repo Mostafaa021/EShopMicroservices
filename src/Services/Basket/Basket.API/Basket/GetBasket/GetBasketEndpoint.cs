@@ -14,10 +14,8 @@ namespace Basket.API.Basket.GetBasket
                     // Map from Query Object to Result 
                     var result = await sender.Send(new GetBasketQuery(username) );
                     // Then Map from Result to Responce
-
                     var Responce = result.Adapt<GetBasketResponce>();
-
-
+                    // Return Result
                     return Results.Ok(Responce);
                 })
                 .WithName("GetBasket")
